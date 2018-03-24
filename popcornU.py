@@ -8,16 +8,16 @@ firebase = firebase.FirebaseApplication('https://popcornu-inf551.firebaseio.com'
 
 
 @app.route("/")
-def login():
-    return render_template('login.html')
+def route_login():
+    return render_template('login.html', userInfo = userInfo)
 
-@app.route("/index")
-def index():
+@app.route("/search")
+def route_search():
     results = firebase.get('/Watchlists', None)
     return render_template('popcornU.html', results=results)
 
 @app.route('/results', methods=['POST'])
-def getResults():
+def route_results():
     data = [{}]
     keywords = request.form['keywords']
     results = firebase.get('/Watchlists', keywords)
@@ -28,6 +28,7 @@ def getResults():
     except:
         results = [temp]
     return render_template('popcornU.html', results=results)
+
 
 if __name__ == "__main__":
     app.run()

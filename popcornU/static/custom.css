@@ -1,0 +1,13 @@
+#searchEngine{
+    text-align:center;
+    height: 50px;
+}
+#board{
+    background-color: rgb(248,250,251);
+}
+.info{
+    border: solid;
+    border-color: rgb(118,214,177);
+    box-shadow: 3px 3px 3px #ccc;
+    background-color: #fff;
+}

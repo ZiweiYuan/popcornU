@@ -1,3 +1,7 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
 <!DOCTYPE HTML>
 <html>
     <head>
@@ -23,7 +27,7 @@
                         <input type="text" name="keywords" id="keywords" placeholder="prison"/>
                         <input type="submit" value="Search" name="submit"/>
                         <input type="reset" value="Reset"  
-                               name="reset" />
+                               name="reset"/>
                     </form>
                 </div>
             </div>
@@ -74,3 +78,5 @@
         </div>
     </body>
 </html>
+
+{% endblock %}

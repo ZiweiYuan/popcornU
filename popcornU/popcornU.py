@@ -1,19 +1,28 @@
 from flask import Flask, send_from_directory, render_template, request, url_for
 import config, urllib, json, requests, re, string
 from firebase import firebase
+from flask_bootstrap import Bootstrap
+
 
 app = Flask(__name__)
 app.config.from_object(config)
 firebase = firebase.FirebaseApplication('https://popcornu-inf551.firebaseio.com', None)
+Bootstrap(app)
 
 @app.route("/")
-def route_login():
-    return render_template('login.html', userInfo = userInfo)
+def index():
+    return render_template('index.html')
+
+@app.route("/login")
+def login():
+    return render_template('login.html')
+
 
 @app.route("/search")
 def route_search():
     results = firebase.get('/Watchlists', None)
     return render_template('popcornU.html', results=results)
+
 
 @app.route('/results', methods=['POST'])
 def route_results():

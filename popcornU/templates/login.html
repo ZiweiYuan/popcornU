@@ -18,7 +18,7 @@
   <input id="txtPassword" type="password" placeholder="Password">
   <button id="btnLogin" class="btn btn-action">Login</button>
   <button id="btnSignUp" class="btn btn-secondary">Register</button>
-  <button id="btnLogout" class="btn btn-action">Log out</button>
+  <button id="btnLogout" class="btn btn-action hide">Log out</button>
   <hr>
   <div id="user-info"><h3 id="login-info"></h3></div>
 </div>
@@ -64,8 +64,10 @@
       const password = txtPassword.value;
       const auth = firebase.auth();
       const promise = auth.signInWithEmailAndPassword(email,password);
-      promise.catch(e => console.log(e.message));
-
+      promise.catch(e => {
+      console.log(e.message);
+      alert(e.message);
+    });
   }); 
 
   //signup event
@@ -74,36 +76,46 @@
       const password = txtPassword.value;
       const auth = firebase.auth();
       const promise = auth.createUserWithEmailAndPassword(email,password);
-      promise.catch(e => console.log(e.message));
+      promise.catch(e => {
+      console.log(e.message);
+      alert(e.message);
+    });
      
   });
 
   //logout event
   btnLogout.addEventListener('click', e => {
       firebase.auth().signOut();
-
   });
 
   //realtime listener
   firebase.auth().onAuthStateChanged(firebaseUser => {
     if(firebaseUser){
       console.log(firebaseUser);
+      btnLogout.classList.remove('hide');
+      btnSignUp.classList.add('hide');
+      btnLogin.classList.add('hide');
+      document.getElementById("login-info").innerHTML = firebaseUser.email + ' has signed in.';
     } else {
-      console.log('not logged in');
+      console.log('No user logged in');
+      btnLogout.classList.add('hide');
+      btnSignUp.classList.remove('hide');
+      btnLogin.classList.remove('hide');
+      document.getElementById("login-info").innerHTML = 'No user logged in.';
     }
   });
 
-  firebase.auth().onAuthStateChanged(function(user) {
-  if (user) {
-    console.log(user.email + ' is signed in.');
-    document.getElementById("login-info").innerHTML = user.email + ' has signed in.';
+ //  firebase.auth().onAuthStateChanged(function(user) {
+ //  if (user) {
+ //    console.log(user.email + ' is signed in.');
+ //    document.getElementById("login-info").innerHTML = user.email + ' has signed in.';
 
-  } else {
-    console.log('No user signed in.');
-    document.getElementById("login-info").innerHTML = 'No user signed in.';
+ //  } else {
+ //    console.log('No user signed in.');
+ //    document.getElementById("login-info").innerHTML = 'No user signed in.';
 
-  }
- });
+ //  }
+ // });
 
 </script>
 {% endblock %}

@@ -12,7 +12,6 @@ types = sorted(firebase.get('/Types', None).keys())
 genres = sorted(firebase.get('/Genres', None).keys())
 years = sorted(firebase.get('/Years', None).keys())
 
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -31,6 +30,7 @@ def route_search():
 @app.route('/results', methods=['POST'])
 def route_results():
     nums, keys, results, keywordNum, filterNum = {}, [], [], [], []
+    typeNum, genreNum, yearNum = [], [], []
 
     keywords = request.form['keywords']
     typesSubmit = request.values.getlist("types")
@@ -39,15 +39,28 @@ def route_results():
 
     for x in typesSubmit:
         if str(x) != "All":
-            filterNum.extend(firebase.get('/Types', str(x)))
+            typeNum.extend(firebase.get('/Types', str(x)))
 
     for genre in genresSubmit:
         if str(genre) != "All":
-            filterNum.extend(firebase.get('/Genres', str(genre)))
+            genreNum.extend(firebase.get('/Genres', str(genre)))
 
     for year in yearsSubmit:
         if str(year) != "All":
-            filterNum.extend(firebase.get('/Years', str(year)))
+            yearNum.extend(firebase.get('/Years', str(year)))
+
+    if typeNum != []:
+        filterNum.extend(typeNum)
+    if filterNum != []:
+        if genreNum != []:
+            filterNum = list(set(filterNum).intersection(set(genreNum)))
+    else:
+        filterNum.extend(genreNum)
+    if filterNum != []:
+        if yearNum != []:
+            filterNum = list(set(filterNum).intersection(set(yearNum)))
+    else:
+        filterNum.extend(genreNum)
 
 
     def parseToken(strings):

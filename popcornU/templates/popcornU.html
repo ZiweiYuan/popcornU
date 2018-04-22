@@ -1,6 +1,9 @@
 {% extends 'index.html' %}
 
 {% block content %}
+
+<!DOCTYPE HTML>
+<html>
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,16 +19,15 @@
                      alt = "PopcornU - For your watchlists" title = "PopcornU - For your watchlists" class="img-responsive"/>
         </div>
         <div class="container">
+            <form action="{{ url_for('route_results')}}" method="post" role="form">
             <!--search engine for keywords-->
             <div class="row">
                 <div id="searchEngine" class="col-md-12">
-                    <form action="{{ url_for('route_results')}}" method="post" role="form">
                         <label for="keyword">Keyword:</label>
                         <input type="text" name="keywords" id="keywords" placeholder="prison"/>
                         <input type="submit" value="Search" name="submit"/>
                         <input type="reset" value="Reset"  
                                name="reset"/>
-                    </form>
                 </div>
             </div>
             <!--factes and results-->
@@ -34,7 +36,39 @@
                 <div class="col-sm-4 col-md-3">
                     <div class="row" style="padding: 0 10px 0 0;">
                         <div class="col-sm-12 col-md-12 info" style="height: 500px">
-                            Factes
+                            <h4>Factes Search</h4>
+                            <div>
+                                <label for="Type">Title&nbsp;Types:</label><br/>
+                                <select name="types" id="types" multiple="multiple" size="6">
+                                    <option value="All" selected="selected">All</option>
+                                    {% for item in types %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <label for="Genre">Genres:</label><br/>
+                                <select name="genres" id="genres" multiple="multiple" size="6">
+                                    <option value="All" selected="selected">All</option>
+                                    {% for item in genres %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                 <label for="Year">Years:</label><br/>
+                                <select name="years" id="years" multiple="multiple" size="6">
+                                    <option value="All" selected="selected">All</option>
+                                    {% for item in years %}
+                                        <option value="{{ item }}">{{ item }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div>
+                                <br/>
+                                <input type="submit" value="Filter" name="submit"/>
+                                <input type="reset" value="Reset" name="reset"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -72,7 +106,9 @@
                     </table>
                 </div>
             </div>
+            </form>
         </div>
     </body>
+</html>
 
 {% endblock %}

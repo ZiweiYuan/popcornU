@@ -12,7 +12,6 @@ types = sorted(firebase.get('/Types', None).keys())
 genres = sorted(firebase.get('/Genres', None).keys())
 years = sorted(firebase.get('/Years', None).keys())
 
-
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -31,6 +30,7 @@ def route_search():
 @app.route('/results', methods=['POST'])
 def route_results():
     nums, keys, results, keywordNum, filterNum = {}, [], [], [], []
+    typeNum, genreNum, yearNum, filters = [], [], [], []
 
     keywords = request.form['keywords']
     typesSubmit = request.values.getlist("types")
@@ -38,16 +38,32 @@ def route_results():
     yearsSubmit = request.values.getlist("years")
 
     for x in typesSubmit:
-        if str(x) != "All":
-            filterNum.extend(firebase.get('/Types', str(x)))
+        filters.append(x)
+        if str(x) != "all types":
+            typeNum.extend(firebase.get('/Types', str(x)))
 
     for genre in genresSubmit:
-        if str(genre) != "All":
-            filterNum.extend(firebase.get('/Genres', str(genre)))
+        filters.append(genre)
+        if str(genre) != "all genres":
+            genreNum.extend(firebase.get('/Genres', str(genre)))
 
     for year in yearsSubmit:
-        if str(year) != "All":
-            filterNum.extend(firebase.get('/Years', str(year)))
+        filters.append(year)
+        if str(year) != "all years":
+            yearNum.extend(firebase.get('/Years', str(year)))
+
+    if typeNum != []:
+        filterNum.extend(typeNum)
+    if filterNum != []:
+        if genreNum != []:
+            filterNum = list(set(filterNum).intersection(set(genreNum)))
+    else:
+        filterNum.extend(genreNum)
+    if filterNum != []:
+        if yearNum != []:
+            filterNum = list(set(filterNum).intersection(set(yearNum)))
+    else:
+        filterNum.extend(genreNum)
 
 
     def parseToken(strings):
@@ -83,7 +99,7 @@ def route_results():
                 result = firebase.get('/Watchlists', num[0])
                 results.append(result)
 
-    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years)
+    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years, keywords=keywords, filters=filters)
 
 
 if __name__ == "__main__":

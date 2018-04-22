@@ -27,15 +27,20 @@
             <div class="row">
                 <div id="searchEngine" class="col-md-12">
                         <label for="keyword">Keyword:</label>
-                        <input type="text" name="keywords" id="keywords" placeholder="prison"/>
+                        <input type="text" name="keywords" id="keywords" value="{{ keywords }}"/>
                         <input type="submit" value="Search" name="submit"/>
                         <input type="reset" value="Reset"  
                                name="reset"/>
                         <br>
                         <label for="keyword">Save Results:</label>
+<<<<<<< HEAD
                         <input type="text" name="save_name" id="save_name" placeholder="name"/>
                         <input type="submit" value="Search and Save" names="save" onclick="save_search()"/>
                         <input type="hidden" name="user_name" id="user_name" value=""/>
+=======
+                        <input type="text" name="save_name" id="save_name" value="{{ keywords }}"/>
+                        <button name="save" onclick="save_search()">Save</button>
+>>>>>>> 273e36ac422bca0ccfc4b3c79f7aaec316b6b055
                 </div>
             </div>
             <!--factes and results-->
@@ -49,7 +54,7 @@
                             <div>
                                 <label for="Type">Title&nbsp;Types:</label><br/>
                                 <select name="types" id="types" multiple="multiple" size="6">
-                                    <option value="All" selected="selected">All</option>
+                                    <option value="all types" selected="selected">All</option>
                                     {% for item in types %}
                                         <option value="{{ item }}">{{ item }}</option>
                                     {% endfor %}
@@ -58,7 +63,7 @@
                             <div>
                                 <label for="Genre">Genres:</label><br/>
                                 <select name="genres" id="genres" multiple="multiple" size="6">
-                                    <option value="All" selected="selected">All</option>
+                                    <option value="all genres" selected="selected">All</option>
                                     {% for item in genres %}
                                         <option value="{{ item }}">{{ item }}</option>
                                     {% endfor %}
@@ -67,7 +72,7 @@
                             <div>
                                  <label for="Year">Years:</label><br/>
                                 <select name="years" id="years" multiple="multiple" size="6">
-                                    <option value="All" selected="selected">All</option>
+                                    <option value="all years" selected="selected">All</option>
                                     {% for item in years %}
                                         <option value="{{ item }}">{{ item }}</option>
                                     {% endfor %}
@@ -83,6 +88,7 @@
                 </div>
                 <!--show search results-->
                 <div id="searchResults" class="col-sm-8 col-md-9 info">
+                    <h4>"{{ keywords }}{% for filter in filters %},&nbsp;{{ filter }}{% endfor %}" search results</h4>
                     <table class="table table-hover">
                       <thead>
                         <tr>

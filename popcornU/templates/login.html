@@ -5,7 +5,6 @@
 <head>
   <title>PopcornU!</title>
   <link hrel="http://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
-<!--   <link rel="stylesheet" href="style.css"> -->
 </head>
 
 
@@ -21,6 +20,14 @@
   <button id="btnLogout" class="btn btn-action hide">Log out</button>
   <hr>
   <div id="user-info"><h3 id="login-info"></h3></div>
+  <form action="" method="post" role="form">
+    <div id="results">
+    <input type="hidden" name="user_name" id="user_name" value=""/>
+    <br>
+    <label>Your saved results</label>
+    <ul id="value"></ul>
+    </div>
+  </form>
 </div>
 
 {% endblock %}
@@ -35,17 +42,19 @@
     initApp = function() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        // User is signed in.
         var email = user.email;
         var uid = user.uid;
         user.getIdToken().then(function(accessToken) {
           document.getElementById('user').textContent = email + ', you have signed in.';
+          document.getElementById('user_name').value = uid;
         });
         console.log('signin', email, uid);
+        getUserData(uid);
+
       } else {
-        // User is signed out.
         document.getElementById('user').textContent = 'No user signed in.';
         console.log('no signin');
+        cleanData();
       }
     }, function(error) {
       console.log(error);
@@ -101,30 +110,58 @@
       btnLogout.classList.remove('hide');
       btnSignUp.classList.add('hide');
       btnLogin.classList.add('hide');
-      // document.getElementById("login-info").innerHTML = firebaseUser.email + ' has signed in.';
     } else {
       console.log('No user logged in');
       btnLogout.classList.add('hide');
       btnSignUp.classList.remove('hide');
       btnLogin.classList.remove('hide');
-      // document.getElementById("login-info").innerHTML = 'No user logged in.';
     }
   });
 
-  firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
-  .then(function() {
-    // Existing and future Auth states are now persisted in the current
-    // session only. Closing the window would clear any existing state even
-    // if a user forgets to sign out.
-    // ...
-    // New sign-in will be persisted with session persistence.
-    return firebase.auth().signInWithEmailAndPassword(email, password);
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  });
+
+  function writeUserData(uid, email, list){
+    firebase.database().ref("users/"+uid).set({
+      uid:uid,
+      email:email,
+      list:list
+    });
+  };
+
+  function getUserData(uid){
+    var ref = firebase.database().ref("users/"+uid+"/list");
+    var ul = document.getElementById('value');
+      
+    ref.on("child_added",function(snapshot)
+    {
+      var li = document.createElement("li");
+      var text = "";
+      var key = "";
+      snapshot.forEach(function(child){
+        console.log(child.key+":"+child.val());
+        if (child.key=="text"){
+            text = child.val(); 
+            console.log("text "+text);
+        }
+        if(child.key=="keyword"){
+            key = child.val();
+            console.log("key "+key);
+        }
+
+        var a = document.createElement("a");
+        a.textContent = " Click";
+        a.setAttribute('href', '/search');
+        li.innerHTML = "Name: "+text + "  -   keyword: " + key;
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+    });
+
+  };
+
+  function cleanData(){
+    var ul = document.getElementById('value');
+    ul.innerHTML='';
+  }
 
 
 </script>

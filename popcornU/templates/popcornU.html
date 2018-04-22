@@ -21,7 +21,8 @@
             <label id="search_saved"></label>
         </div>
         <div class="container">
-            <form action="{{ url_for('route_results')}}" method="post" role="form">
+
+            <form action="{{ url_for('route_results')}}" method="post" role="form" onsubmit="submit">
             <!--search engine for keywords-->
             <div class="row">
                 <div id="searchEngine" class="col-md-12">
@@ -33,7 +34,8 @@
                         <br>
                         <label for="keyword">Save Results:</label>
                         <input type="text" name="save_name" id="save_name" placeholder="name"/>
-                        <button name="save" onclick="save_search()">Save</button>
+                        <input type="submit" value="Search and Save" names="save" onclick="save_search()"/>
+                        <input type="hidden" name="user_name" id="user_name" value=""/>
                 </div>
             </div>
             <!--factes and results-->
@@ -132,15 +134,15 @@
     initApp = function() {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        // User is signed in.
         var email = user.email;
         var uid = user.uid;
         user.getIdToken().then(function(accessToken) {
           document.getElementById('user').textContent = email + ', you have signed in.';
+          document.getElementById('user_name').value = uid;
+          
         });
         console.log('signin', email, uid);
       } else {
-        // User is signed out.
         document.getElementById('user').textContent = 'No user signed in.';
         console.log('no signin');
       }
@@ -155,9 +157,22 @@
 
 
   function save_search(){
-    var text = document.getElementById("save_name").value;
-    console.log(text);
-    document.getElementById("search_saved").textContent = "You saved as "+text+".";
+
+    var user = firebase.auth().currentUser;
+    if (user!=null){
+        var uid = user.uid;
+        
+        var keyword = document.getElementById("keywords").value;
+        var text = document.getElementById("save_name").value;
+        console.log(text+":"+keyword);
+        document.getElementById("search_saved").textContent = "You saved as "+text+".";
+
+        firebase.database().ref("users/"+uid+"/list").push({
+            text:text,
+            keyword:keyword
+    });
+    };
+
   };
 </script>
 {% endblock %}

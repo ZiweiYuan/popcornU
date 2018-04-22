@@ -30,7 +30,7 @@ def route_search():
 @app.route('/results', methods=['POST'])
 def route_results():
     nums, keys, results, keywordNum, filterNum = {}, [], [], [], []
-    typeNum, genreNum, yearNum = [], [], []
+    typeNum, genreNum, yearNum, filters = [], [], [], []
 
     keywords = request.form['keywords']
     typesSubmit = request.values.getlist("types")
@@ -38,15 +38,18 @@ def route_results():
     yearsSubmit = request.values.getlist("years")
 
     for x in typesSubmit:
-        if str(x) != "All":
+        filters.append(x)
+        if str(x) != "all types":
             typeNum.extend(firebase.get('/Types', str(x)))
 
     for genre in genresSubmit:
-        if str(genre) != "All":
+        filters.append(genre)
+        if str(genre) != "all genres":
             genreNum.extend(firebase.get('/Genres', str(genre)))
 
     for year in yearsSubmit:
-        if str(year) != "All":
+        filters.append(year)
+        if str(year) != "all years":
             yearNum.extend(firebase.get('/Years', str(year)))
 
     if typeNum != []:
@@ -96,7 +99,7 @@ def route_results():
                 result = firebase.get('/Watchlists', num[0])
                 results.append(result)
 
-    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years)
+    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years, keywords=keywords, filters=filters)
 
 
 if __name__ == "__main__":

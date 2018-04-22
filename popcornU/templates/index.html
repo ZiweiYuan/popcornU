@@ -30,6 +30,8 @@
 
 {% block content %}
     <div class="container">
+        <h1 id="bigOne"></h1>
+        <h2 id='user'></h2>
 <!--         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -45,17 +47,49 @@
 
 {% block scripts %}
     <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='firebase.js') }}""></script>
     <script>
       // Initialize Firebase
-      var config = {
-        apiKey: "AIzaSyD2rfrga7gEv9s9nK3HBH13rH3BvJzbDHU",
-        authDomain: "popcornu-user.firebaseapp.com",
-        databaseURL: "https://popcornu-user.firebaseio.com",
-        projectId: "popcornu-user",
-        storageBucket: "",
-        messagingSenderId: "249396109468"
-      };
-      firebase.initializeApp(config);
-    </script>
-{% endblock scripts %}
+      // var config = {
+      //   apiKey: "AIzaSyD2rfrga7gEv9s9nK3HBH13rH3BvJzbDHU",
+      //   authDomain: "popcornu-user.firebaseapp.com",
+      //   databaseURL: "https://popcornu-user.firebaseio.com",
+      //   projectId: "popcornu-user",
+      //   storageBucket: "popcornu-user.appspot.com",
+      //   messagingSenderId: "249396109468"
+      // };
+      // firebase.initializeApp(config);
+
+      var bigOne = document.getElementById('bigOne');
+      var dbRef = firebase.database().ref().child('Text');
+      dbRef.on('value', snap => bigOne.innerText = snap.val())
+
+
+        initApp = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var email = user.email;
+        var uid = user.uid;
+        user.getIdToken().then(function(accessToken) {
+        document.getElementById('user').textContent = email + ', you have signed in.';
+        });
+        console.log('signin');
+      } else {
+        // User is signed out.
+        document.getElementById('user').textContent = 'No user signed in.';
+        console.log('no signin');
+      }
+    }, function(error) {
+      console.log(error);
+    });
+  };
+
+  window.addEventListener('load', function() {
+    initApp()
+  });
+  
+  </script>
+
+{% endblock %}
 

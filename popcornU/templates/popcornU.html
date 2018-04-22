@@ -12,11 +12,13 @@
         <link href="../static/custom.css" rel="stylesheet" type="text/css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></script>
         <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-    </head>
+    </head> 
     <body>
         <div class="container">
+            <h2 id='user'></h2>
             <img src = "../static/icon.png" height="80" width="150" 
                      alt = "PopcornU - For your watchlists" title = "PopcornU - For your watchlists" class="img-responsive"/>
+            <label id="search_saved"></label>
         </div>
         <div class="container">
             <form action="{{ url_for('route_results')}}" method="post" role="form">
@@ -28,11 +30,16 @@
                         <input type="submit" value="Search" name="submit"/>
                         <input type="reset" value="Reset"  
                                name="reset"/>
+                        <br>
+                        <label for="keyword">Save Results:</label>
+                        <input type="text" name="save_name" id="save_name" placeholder="name"/>
+                        <button name="save" onclick="save_search()">Save</button>
                 </div>
             </div>
             <!--factes and results-->
             <div id="board" class="row">
                 <!--facted search-->
+                <br>
                 <div class="col-sm-4 col-md-3">
                     <div class="row" style="padding: 0 10px 0 0;">
                         <div class="col-sm-12 col-md-12 info" style="height: 500px">
@@ -111,4 +118,46 @@
     </body>
 </html>
 
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='firebase.js') }}""></script>
+    <script>
+
+
+
+    initApp = function() {
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        var email = user.email;
+        var uid = user.uid;
+        user.getIdToken().then(function(accessToken) {
+          document.getElementById('user').textContent = email + ', you have signed in.';
+        });
+        console.log('signin', email, uid);
+      } else {
+        // User is signed out.
+        document.getElementById('user').textContent = 'No user signed in.';
+        console.log('no signin');
+      }
+    }, function(error) {
+      console.log(error);
+    });
+  };
+
+  window.addEventListener('load', function() {
+    initApp()
+  });
+
+
+  function save_search(){
+    var text = document.getElementById("save_name").value;
+    console.log(text);
+    document.getElementById("search_saved").textContent = "You saved as "+text+".";
+  };
+</script>
 {% endblock %}

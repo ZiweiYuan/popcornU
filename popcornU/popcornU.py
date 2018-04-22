@@ -12,6 +12,7 @@ types = sorted(firebase.get('/Types', None).keys())
 genres = sorted(firebase.get('/Genres', None).keys())
 years = sorted(firebase.get('/Years', None).keys())
 
+
 @app.route("/")
 def index():
     return render_template('index.html')
@@ -47,6 +48,7 @@ def route_results():
     for year in yearsSubmit:
         if str(year) != "All":
             filterNum.extend(firebase.get('/Years', str(year)))
+
 
     def parseToken(strings):
         strings = re.sub('[^a-zA-Z0-9]',' ',strings)

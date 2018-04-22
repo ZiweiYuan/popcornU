@@ -8,6 +8,9 @@ app = Flask(__name__)
 app.config.from_object(config)
 firebase = firebase.FirebaseApplication('https://popcornu-inf551.firebaseio.com', None)
 Bootstrap(app)
+types = sorted(firebase.get('/Types', None).keys())
+genres = sorted(firebase.get('/Genres', None).keys())
+years = sorted(firebase.get('/Years', None).keys())
 
 @app.route("/")
 def index():
@@ -21,41 +24,64 @@ def login():
 @app.route("/search")
 def route_search():
     results = firebase.get('/Watchlists', None)
-    return render_template('popcornU.html', results=results)
+    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years)
 
 
 @app.route('/results', methods=['POST'])
 def route_results():
-    nums, keys, results = {}, [], []
+    nums, keys, results, keywordNum, filterNum = {}, [], [], [], []
+
     keywords = request.form['keywords']
-    if keywords == "":
-        results = firebase.get('/Watchlists', None)
-        return render_template('popcornU.html', results=results)
+    typesSubmit = request.values.getlist("types")
+    genresSubmit = request.values.getlist("genres")
+    yearsSubmit = request.values.getlist("years")
+
+    for x in typesSubmit:
+        if str(x) != "All":
+            filterNum.extend(firebase.get('/Types', str(x)))
+
+    for genre in genresSubmit:
+        if str(genre) != "All":
+            filterNum.extend(firebase.get('/Genres', str(genre)))
+
+    for year in yearsSubmit:
+        if str(year) != "All":
+            filterNum.extend(firebase.get('/Years', str(year)))
+
     def parseToken(strings):
         strings = re.sub('[^a-zA-Z0-9]',' ',strings)
         strings = strings.lower()
         return strings.split()
 
-    keywordToken = parseToken(keywords)
-    for token in keywordToken:
-        try:
-            if token not in keys:
-                keys.append(token)
-                inums = firebase.get('/Keywords', token)
-                for inum in inums:
-                    if inum in nums.keys():
-                        nums[inum] += 1
-                    else:
-                        nums[inum] = 1
-        except:
-            continue
+    if keywords == "":
+        if filterNum == []:
+            results = firebase.get('/Watchlists', None)
+        else:
+            for y in filterNum:
+                result = firebase.get('/Watchlists', y)
+                results.append(result)
+    else:
+        keywordToken = parseToken(keywords)
+        for token in keywordToken:
+            try:
+                if token not in keys:
+                    keys.append(token)
+                    inums = firebase.get('/Keywords', token)
+                    for inum in inums:
+                        if inum in nums.keys():
+                            nums[inum] += 1
+                        else:
+                            nums[inum] = 1
+            except:
+                continue
+        nums = sorted(nums.items(),key = lambda x:x[1],reverse = True)
+        for num in nums:
+            # intersection of facets search and keyword search
+            if filterNum == [] or num[0] in filterNum:
+                result = firebase.get('/Watchlists', num[0])
+                results.append(result)
 
-    nums = sorted(nums.items(),key = lambda x:x[1],reverse = True)
-    for num in nums:
-        result = firebase.get('/Watchlists', num[0])
-        results.append(result)
-
-    return render_template('popcornU.html', results=results)
+    return render_template('popcornU.html', results=results, types=types, genres=genres, years=years)
 
 
 if __name__ == "__main__":

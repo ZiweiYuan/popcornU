@@ -60,12 +60,14 @@ def route_results():
 		if genreNum != []:
 			filterNum = list(set(filterNum).intersection(set(genreNum)))
 	else:
-		filterNum.extend(genreNum)
+		if genreNum != []:
+			filterNum.extend(genreNum)
 	if filterNum != []:
 		if yearNum != []:
 			filterNum = list(set(filterNum).intersection(set(yearNum)))
 	else:
-		filterNum.extend(genreNum)
+		if yearNum != []:
+			filterNum.extend(yearNum)
 
 
 	def parseToken(strings):

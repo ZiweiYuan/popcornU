@@ -27,6 +27,7 @@
     <ul id="value"></ul>
     </div>
   </form>
+  <hr>
 
 </div>
 
@@ -152,7 +153,7 @@
 
         var a = document.createElement("a");
         a.textContent = " Click";
-        a.setAttribute('href', '/login');
+        a.setAttribute('href', "{{ url_for('route_search') }}");
         a.setAttribute('name', 'a');
         a.setAttribute('value', key)
         li.innerHTML = "Name: "+text + "  -   keyword: " + key;

@@ -105,6 +105,36 @@ def route_results():
 
 	return render_template('popcornU.html', results=results, types=types, genres=genres, years=years, keywords=keywords, filters=filters)
 
+@app.route('/history/<string:keywords>/', methods=['GET','POST'])
+def route_history(keywords):
+	nums, keys, results, keywordNum = {}, [], [], []
+	def parseToken(strings):
+		strings = re.sub('[^a-zA-Z0-9]',' ',strings)
+		strings = strings.lower()
+		return strings.split()
+
+	if keywords == "":
+		results = firebase.get('/Watchlists', None)
+	else:
+		keywordToken = parseToken(keywords)
+		for token in keywordToken:
+			try:
+				if token not in keys:
+					keys.append(token)
+					inums = firebase.get('/Keywords', token)
+					for inum in inums:
+						if inum in nums.keys():
+							nums[inum] += 1
+						else:
+							nums[inum] = 1
+			except:
+				continue
+		nums = sorted(nums.items(),key = lambda x:x[1],reverse = True)
+		for num in nums:
+			result = firebase.get('/Watchlists', num[0])
+			results.append(result)
+
+	return render_template('popcornU.html', results=results, types=types, genres=genres, years=years, keywords=keywords)
 
 
 if __name__ == "__main__":

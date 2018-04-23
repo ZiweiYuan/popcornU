@@ -165,13 +165,19 @@
         var uid = user.uid;
         
         var keyword = document.getElementById("keywords").value;
+        var type = document.getElementById("types").value;
+        var year = document.getElementById("years").value;
+        var genre = document.getElementById("genres").value;
         var text = document.getElementById("save_name").value;
         console.log(text+":"+keyword);
         document.getElementById("search_saved").textContent = "You saved as "+text+".";
 
         firebase.database().ref("users/"+uid+"/list").push({
             text:text,
-            keyword:keyword
+            keyword:keyword,
+            type:type,
+            year:year,
+            genre:genre
     });
     };
 

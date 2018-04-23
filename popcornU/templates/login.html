@@ -147,6 +147,9 @@
       li.setAttribute("id", "li");
       var text = "";
       var key = "";
+      var type = "";
+      var genre = "";
+      var year = "";
 
         count += 1;
         var a = document.createElement("a");
@@ -164,11 +167,20 @@
             key = child.val();
             keywords.push(key);
         }
+        if(child.key=="type"){
+          type = child.val();
+        }
+        if(child.key=="genre"){
+          genre = child.val();
+        }
+        if(child.key=="year"){
+          year = child.val();
+        }
 
 
 
 
-        li.innerHTML = "Name: "+text + "  -   keyword: " + key;
+        li.innerHTML = "[Name] "+text + ", [Keyword] " + key+", [Filter]  TYPE - "+type+",  GENRE - "+genre+", YEAR - "+year;
         ul.appendChild(li);
       });
 

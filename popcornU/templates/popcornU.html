@@ -21,37 +21,40 @@
             <label id="search_saved"></label>
         </div>
         <div class="container">
-
             <form action="{{ url_for('route_results')}}" method="post" role="form" onsubmit="submit">
             <!--search engine for keywords-->
             <div class="row">
-                <div id="searchEngine" class="col-md-12">
+                <div id="searchEngine" class="col-md-12" style="margin-bottom: 20px;">
                         <label for="keyword">Keyword:</label>
-                        <input type="text" name="keywords" id="keywords" value="{{ keywords }}"/>
-                        <input type="submit" value="Search" name="submit"/>
-                        <input type="reset" value="Reset"  
-                               name="reset"/>
-                        <br>
+                        <input type="text" name="keywords" id="keywords" value="{{ keywords }}" placeholder="input title or director"/>
+                        <input class="button" type="submit" value="Search" name="submit"/>
+                        <input class="button" type="reset" value="Reset" name="reset" style="margin-right: 20px;"/>
                         <label for="keyword">Save Results:</label>
+<<<<<<< HEAD
                         <input type="text" name="save_name" id="save_name" placeholder="name"/>
                         <input type="submit" value="Search and Save" names="save" onclick="save_search()"/>
                         <input type="hidden" name="user_name" id="user_name" value=""/>
                         <input type="text" name="save_name" id="save_name" value="{{ keywords }}"/>
                         <button name="save" onclick="save_search()">Save</button>
 
+=======
+                        <input type="text" name="save_name" id="save_name" placeholder="save your movie title"/>
+                        <input class="button" type="submit" value="Save" names="save" onclick="save_search()"/>
+                        <input type="hidden" name="user_name" id="user_name" value=""/>
+>>>>>>> e7e7a4e145c4718897298bc882458b85fcf1b596
                 </div>
             </div>
             <!--factes and results-->
             <div id="board" class="row">
                 <!--facted search-->
                 <br>
-                <div class="col-sm-4 col-md-3">
+                <div class="col-sm-4 col-md-2">
                     <div class="row" style="padding: 0 10px 0 0;">
-                        <div class="col-sm-12 col-md-12 info" style="height: 500px">
+                        <div class="col-sm-12 col-md-12 info" style="height: 500px;">
                             <h4>Factes Search</h4>
                             <div>
                                 <label for="Type">Title&nbsp;Types:</label><br/>
-                                <select name="types" id="types" multiple="multiple" size="6">
+                                <select name="types" id="types" multiple="multiple" size="6" style="width:100px;">
                                     <option value="all types" selected="selected">All</option>
                                     {% for item in types %}
                                         <option value="{{ item }}">{{ item }}</option>
@@ -60,7 +63,7 @@
                             </div>
                             <div>
                                 <label for="Genre">Genres:</label><br/>
-                                <select name="genres" id="genres" multiple="multiple" size="6">
+                                <select name="genres" id="genres" multiple="multiple" size="6" style="width:100px;">
                                     <option value="all genres" selected="selected">All</option>
                                     {% for item in genres %}
                                         <option value="{{ item }}">{{ item }}</option>
@@ -69,7 +72,7 @@
                             </div>
                             <div>
                                  <label for="Year">Years:</label><br/>
-                                <select name="years" id="years" multiple="multiple" size="6">
+                                <select name="years" id="years" multiple="multiple" size="6" style="width:100px;">
                                     <option value="all years" selected="selected">All</option>
                                     {% for item in years %}
                                         <option value="{{ item }}">{{ item }}</option>
@@ -78,15 +81,17 @@
                             </div>
                             <div>
                                 <br/>
-                                <input type="submit" value="Filter" name="submit"/>
-                                <input type="reset" value="Reset" name="reset"/>
+                                <input class="button" type="submit" value="Filter" name="submit"/>
+                                <input class="button" type="reset" value="Reset" name="reset"/>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!--show search results-->
-                <div id="searchResults" class="col-sm-8 col-md-9 info">
-                    <h4>"{{ keywords }}{% for filter in filters %},&nbsp;{{ filter }}{% endfor %}" search results</h4>
+                <div id="searchResults" class="col-sm-8 col-md-10 info">
+                    <h4 >"{{ keywords }}{% for filter in filters %},&nbsp;{{ filter }}{% endfor %}" search results</h4>
+                    <br/>
+                    <div class="table-responsive pre-scrollable" style="max-height: 435px;">
                     <table class="table table-hover">
                       <thead>
                         <tr>
@@ -117,6 +122,7 @@
                           {% endfor %}
                       </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             </form>

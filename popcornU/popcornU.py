@@ -20,13 +20,7 @@ def index():
 def login():
 	url = 'https://popcornu-user.firebaseio.com/users.json'
 	response = requests.get(url).json()
-	if request.method== 'POST':
-		aa=request.form['key']
-	else:
-		print('nah')
-		aa=request.args.get('key')
-		print(aa)
-	return render_template('login.html', response=response, code=307)
+	return render_template('login.html', response=response)
 
 
 @app.route("/search")

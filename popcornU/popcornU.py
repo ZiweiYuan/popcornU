@@ -105,9 +105,10 @@ def route_results():
 
 	return render_template('popcornU.html', results=results, types=types, genres=genres, years=years, keywords=keywords, filters=filters)
 
-@app.route('/history/<string:keywords>/', methods=['GET','POST'])
-def route_history(keywords):
+@app.route('/history', methods=['POST'])
+def route_history():
 	nums, keys, results, keywordNum = {}, [], [], []
+	keywords = request.form['history']
 	def parseToken(strings):
 		strings = re.sub('[^a-zA-Z0-9]',' ',strings)
 		strings = strings.lower()

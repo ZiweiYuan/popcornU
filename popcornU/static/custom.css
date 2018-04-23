@@ -11,3 +11,7 @@
     box-shadow: 3px 3px 3px #ccc;
     background-color: #fff;
 }
+.button{
+    width: 5px;
+    background: green;
+}

@@ -140,7 +140,7 @@
         user.getIdToken().then(function(accessToken) {
         document.getElementById('user').textContent = email + ', you have signed in.';
         document.getElementById('user_name').value = uid;
-        document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
+        // document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
           
         });
         console.log('signin', email, uid);

@@ -28,6 +28,7 @@
     </div>
   </form>
     <form action="{{ url_for('route_history') }}" method="post" role="form" onsubmit="submit">
+        <label>Search History:</label>
         <input type="text" name="history" id="history" value=""/>
         <input type="submit" value="Search" name="submit"/>
     </form>
@@ -55,7 +56,8 @@
           document.getElementById('user').textContent = email + ', you have signed in.';
         });
         console.log('signin', email, uid);
-        getUserData(uid);
+        getUserData(uid, keywords);
+        // addClick(a, count, keywords);
         user_info();
       } else {
         document.getElementById('user').textContent = 'No user signed in.';
@@ -68,9 +70,8 @@
   };
 
   window.addEventListener('load', function() {
-    initApp()
+    initApp();
   });
-
 
   //create elements
   const txtEmail = document.getElementById('txtEmail');
@@ -78,6 +79,9 @@
   const btnLogin = document.getElementById('btnLogin');
   const btnSignUp = document.getElementById('btnSignUp');
   const btnLogout = document.getElementById('btnLogout'); 
+
+  const names = [];
+  const keywords = [];
 
   //login event
   btnLogin.addEventListener('click', e=> {
@@ -133,35 +137,54 @@
     });
   };
 
-  function getUserData(uid){
+  function getUserData(uid, keywords){
     var ref = firebase.database().ref("users/"+uid+"/list");
     var ul = document.getElementById('value');
+    var count = 0;
     ref.on("child_added",function(snapshot)
     {
       var li = document.createElement("li");
+      li.setAttribute("id", "li");
       var text = "";
       var key = "";
+
+        count += 1;
+        var a = document.createElement("a");
+        a.textContent = " Click";
+        a.setAttribute('id', "bt"+count);
+        
       snapshot.forEach(function(child){
-        console.log(child.key+":"+child.val());
+        // console.log(child.key+":"+child.val());
         if (child.key=="text"){
             text = child.val(); 
-            console.log("text "+text);
+            names.push(text);
+            // console.log("text "+text);
         }
         if(child.key=="keyword"){
             key = child.val();
-            console.log("key "+key);
+            keywords.push(key);
         }
 
-        var a = document.createElement("a");
-        a.textContent = " Click";
-        a.setAttribute('name', 'a');
-        a.setAttribute('value', key);
-        a.setAttribute('href', "{{ url_for('login') }}");
-        document.getElementById("history").value=a.getAttribute('value');
+
+
+
         li.innerHTML = "Name: "+text + "  -   keyword: " + key;
-        li.appendChild(a);
         ul.appendChild(li);
       });
+
+        a.setAttribute('value', key);
+        li.appendChild(a);
+
+
+        var x = document.getElementById(a.getAttribute('id'));
+        if(x){
+        console.log(x.id, x.getAttribute('value'));
+        document.getElementById(x.getAttribute('id')).addEventListener("click", e=>{
+            myFunction(x.getAttribute('value'));
+        })
+        } else{
+          console.log("no");
+        }
     });
 
   };
@@ -176,11 +199,19 @@
     var user = firebase.auth().currentUser;
     if (user!=null){
         var uid = user.uid;
-        document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
     };
 
   };
+  function showKey(key){
+     document.getElementById("history").value=key;
+     console.log("canyousee", key);
+  };
 
 
+
+
+function myFunction(keywords) {
+    document.getElementById("history").value=keywords;
+};
 </script>
 {% endblock %}

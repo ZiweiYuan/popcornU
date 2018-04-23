@@ -25,7 +25,6 @@
     <br>
     <label>Your saved results</label>
     <ul id="value"></ul>
-    </div>
   </form>
     <form action="{{ url_for('route_history') }}" method="post" role="form" onsubmit="submit">
         <label>Search History:</label>
@@ -33,7 +32,8 @@
         <input type="submit" value="Search" name="submit"/>
         <input type="reset" value="Reset" name="reset"/>
     </form>
-  <hr>
+      <hr>
+    </div>
 
 </div>
 
@@ -56,12 +56,14 @@
         user.getIdToken().then(function(accessToken) {
           document.getElementById('user').textContent = email + ', you have signed in.';
         });
+        document.getElementById('results').classList.remove('hide');
         console.log('signin', email, uid);
         getUserData(uid, keywords);
         // addClick(a, count, keywords);
         user_info();
       } else {
         document.getElementById('user').textContent = 'No user signed in.';
+        document.getElementById('results').classList.add('hide');
         console.log('no signin');
         cleanData();
       }

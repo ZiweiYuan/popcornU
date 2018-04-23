@@ -29,9 +29,9 @@
                         <input type="text" name="keywords" id="keywords" value="{{ keywords }}" placeholder="input title or director"/>
                         <input type="submit" value="Search" name="submit"/>
                         <input type="reset" value="Reset" name="reset" style="margin-right: 20px;"/>
-                        <label for="keyword">Save Results:</label>
+                        <label for="keyword" id="save_label">Save Results:</label>
                         <input type="text" name="save_name" id="save_name" placeholder="name"/>
-                        <input type="submit" value="Search and Save" names="save" onclick="save_search()"/>
+                        <input type="submit" value="Search and Save" id="save_button" names="save" onclick="save_search()"/>
                         <input type="hidden" name="user_name" id="user_name" value=""/>
                 </div>
             </div>
@@ -141,12 +141,18 @@
         document.getElementById('user').textContent = email + ', you have signed in.';
         document.getElementById('user_name').value = uid;
         // document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
+        document.getElementById('save_label').classList.remove('hide');
+        document.getElementById('save_name').classList.remove('hide');
+        document.getElementById('save_button').classList.remove('hide');
           
         });
         console.log('signin', email, uid);
       } else {
         document.getElementById('user').textContent = 'No user signed in.';
         console.log('no signin');
+        document.getElementById('save_name').classList.add('hide');
+        document.getElementById('save_button').classList.add('hide');
+        document.getElementById('save_label').classList.add('hide');
       }
     }, function(error) {
       console.log(error);

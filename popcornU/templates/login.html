@@ -20,15 +20,20 @@
   <button id="btnLogout" class="btn btn-action hide">Log out</button>
   <hr>
   <div id="user-info"><h3 id="login-info"></h3></div>
-  <form action="" method="post" role="form">
+  <form action="{{ url_for('login') }}" method="post">
     <div id="results">
-    <input type="hidden" name="user_name" id="user_name" value=""/>
+    <input type="submit" name="key" value="aaa">
     <br>
     <label>Your saved results</label>
     <ul id="value"></ul>
     </div>
   </form>
+
 </div>
+
+
+
+
 
 {% endblock %}
 
@@ -46,11 +51,10 @@
         var uid = user.uid;
         user.getIdToken().then(function(accessToken) {
           document.getElementById('user').textContent = email + ', you have signed in.';
-          document.getElementById('user_name').value = uid;
         });
         console.log('signin', email, uid);
         getUserData(uid);
-
+        user_info();
       } else {
         document.getElementById('user').textContent = 'No user signed in.';
         console.log('no signin');
@@ -149,7 +153,9 @@
 
         var a = document.createElement("a");
         a.textContent = " Click";
-        a.setAttribute('href', '/search');
+        a.setAttribute('href', '/login');
+        a.setAttribute('name', 'a');
+        a.setAttribute('value', key)
         li.innerHTML = "Name: "+text + "  -   keyword: " + key;
         li.appendChild(a);
         ul.appendChild(li);
@@ -162,6 +168,16 @@
     var ul = document.getElementById('value');
     ul.innerHTML='';
   }
+
+
+  function user_info(){
+    var user = firebase.auth().currentUser;
+    if (user!=null){
+        var uid = user.uid;
+        document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
+    };
+
+  };
 
 
 </script>

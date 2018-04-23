@@ -33,14 +33,12 @@
                                name="reset"/>
                         <br>
                         <label for="keyword">Save Results:</label>
-<<<<<<< HEAD
                         <input type="text" name="save_name" id="save_name" placeholder="name"/>
                         <input type="submit" value="Search and Save" names="save" onclick="save_search()"/>
                         <input type="hidden" name="user_name" id="user_name" value=""/>
-=======
                         <input type="text" name="save_name" id="save_name" value="{{ keywords }}"/>
                         <button name="save" onclick="save_search()">Save</button>
->>>>>>> 273e36ac422bca0ccfc4b3c79f7aaec316b6b055
+
                 </div>
             </div>
             <!--factes and results-->
@@ -143,8 +141,9 @@
         var email = user.email;
         var uid = user.uid;
         user.getIdToken().then(function(accessToken) {
-          document.getElementById('user').textContent = email + ', you have signed in.';
-          document.getElementById('user_name').value = uid;
+        document.getElementById('user').textContent = email + ', you have signed in.';
+        document.getElementById('user_name').value = uid;
+        document.getElementById('userId').value = "\{\{ "+uid+" \}\}";
           
         });
         console.log('signin', email, uid);

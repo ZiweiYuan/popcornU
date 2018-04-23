@@ -30,7 +30,7 @@
 
 {% block content %}
     <div class="container">
-        <h1 id="bigOne"></h1>
+        <h1 id="bigOne">Welcome to PopcornU!</h1>
         <h2 id='user'></h2>
     </div>
 {% endblock %}
@@ -40,9 +40,9 @@
     <script type="text/javascript" src="{{ url_for('static', filename='firebase.js') }}""></script>
     <script>
 
-      var bigOne = document.getElementById('bigOne');
-      var dbRef = firebase.database().ref().child('Text');
-      dbRef.on('value', snap => bigOne.innerText = snap.val())
+      // var bigOne = document.getElementById('bigOne');
+      // var dbRef = firebase.database().ref().child('Text');
+      // dbRef.on('value', snap => bigOne.innerText = snap.val())
 
 
       initApp = function() {

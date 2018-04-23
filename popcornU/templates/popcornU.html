@@ -9,14 +9,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>PopcornU - For your watchlists</title>
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-        <link href="../static/custom.css" rel="stylesheet" type="text/css">
+        <link href="{{url_for('static', filename='custom.css')}}") rel="stylesheet" type="text/css">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></script>
         <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     </head> 
     <body>
         <div class="container">
             <h2 id='user'></h2>
-            <img src = "../static/icon.png" height="80" width="150" 
+            <img src = "{{url_for('static', filename='icon.png')}}" height="80" width="150" 
                      alt = "PopcornU - For your watchlists" title = "PopcornU - For your watchlists" class="img-responsive"/>
             <label id="search_saved"></label>
         </div>

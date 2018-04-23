@@ -27,11 +27,13 @@
     <ul id="value"></ul>
     </div>
   </form>
+    <form action="{{ url_for('route_history') }}" method="post" role="form" onsubmit="submit">
+        <input type="text" name="history" id="history" value=""/>
+        <input type="submit" value="Search" name="submit"/>
+    </form>
   <hr>
 
 </div>
-
-
 
 
 
@@ -134,7 +136,6 @@
   function getUserData(uid){
     var ref = firebase.database().ref("users/"+uid+"/list");
     var ul = document.getElementById('value');
-      
     ref.on("child_added",function(snapshot)
     {
       var li = document.createElement("li");
@@ -155,7 +156,8 @@
         a.textContent = " Click";
         a.setAttribute('name', 'a');
         a.setAttribute('value', key);
-        a.setAttribute('href', "{{ url_for('route_history', keywords="prison") }}");
+        a.setAttribute('href', "{{ url_for('login') }}");
+        document.getElementById("history").value=a.getAttribute('value');
         li.innerHTML = "Name: "+text + "  -   keyword: " + key;
         li.appendChild(a);
         ul.appendChild(li);

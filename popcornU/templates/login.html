@@ -153,9 +153,9 @@
 
         var a = document.createElement("a");
         a.textContent = " Click";
-        a.setAttribute('href', "{{ url_for('route_search') }}");
         a.setAttribute('name', 'a');
-        a.setAttribute('value', key)
+        a.setAttribute('value', key);
+        a.setAttribute('href', "{{ url_for('route_history', keywords="prison") }}");
         li.innerHTML = "Name: "+text + "  -   keyword: " + key;
         li.appendChild(a);
         ul.appendChild(li);
